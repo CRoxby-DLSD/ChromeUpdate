@@ -76,9 +76,12 @@ for ($j = 0; $j-lt $list.length; $j++) {
 		if ($links[$j]) {
 			# Remove the line-breaks from the link.
 			$links[$j] = $($links[$j] -replace "`r`n")
-			#wget $links[$j] -OutFile ($links[$j] -split '/' | Select-Object -Last 1)
+
+			# Download the file.
+			wget $links[$j] -OutFile ($links[$j] -split '/' | Select-Object -Last 1)
+
 			# With the ZIP file downloaded, the the old BIN file can go away
-			#Remove-Item –path $files[$j]
+			Remove-Item –path $files[$j]
 		}
 	}
 }
