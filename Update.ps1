@@ -2,8 +2,6 @@
 	Automatically update any recovery bin for families listed in the input file.
 
 	This awesome script was created by Chris Roxby for Deer Lakes School District.
-	v1.0 - 4/17/2020
-	GPLv3
 #>
 
 $INFILE = ".\models.txt"
@@ -12,6 +10,9 @@ $INFILE = ".\models.txt"
 	* Do NOT use the model name. E.g. Google Pixelbook
 	* DO use the Firmware name. E.g. EVE
 #>
+
+# This makes the downloads MUCH faster
+$ProgressPreference = "SilentlyContinue"
 
 # Read the input file.
 $content=Get-Content $INFILE
@@ -43,11 +44,12 @@ $links = foreach($line in $list) {
 # Get the current files so that we only download what we need.
 $curFiles = Get-ChildItem -Include *.bin -Name
 
+# This array needs to be pre-allocated.
+$files = New-Object String[] $list.length
+
 # Find files that match the input file.
-$files = foreach($item in $list) {
-	if ($item) {
-		$curFiles|Select-String -Pattern $item
-	}
+for ($h = 0; $h-lt $list.length; $h++) {
+	$files[$h]=$curFiles|Select-String -Pattern $list[$h]
 }
 
 # Create Empty Array to store the version comparison result.
